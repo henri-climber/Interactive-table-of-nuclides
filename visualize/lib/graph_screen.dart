@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visualize/atom_model.dart';
 import 'package:visualize/data_api.dart';
 import 'package:visualize/graph_background.dart';
@@ -24,12 +25,14 @@ class _GraphScreenState extends State<GraphScreen> {
 
   double x = 0.0;
   double y = 0.0;
+  bool showArrows = true;
 
   @override
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
-
+    print(x);
+    print("y" + y.toString());
     return Scaffold(
         body: MouseRegion(
             onHover: _updateLocation,
@@ -38,14 +41,23 @@ class _GraphScreenState extends State<GraphScreen> {
                 const GraphBackgroundWidget(),
                 CustomPaint(
                   painter: MyPainter(
-                      elements: atoms, maxNeutronCount: _sliderValue.toInt()),
+                    showArrows: showArrows,
+                    elements: atoms,
+                    maxNeutronCount: _sliderValue.toInt(),
+                  ),
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(150, 0, 0, 50),
                       child: Container()),
                 ),
                 customSlider(),
+                toggleShowArrows(),
                 loadElementsButton(),
-                showDetialsOfElement()
+                showDetialsOfElement(),
+                if (showArrows) displayArrowLegend(230, 90, "Fusion bis Eisen"),
+                if (showArrows) displayArrowLegend(530, 390, "RP-Prozess"),
+                if (showArrows) displayArrowLegend(820, 690, "P-Prozess"),
+                if (showArrows) displayArrowLegend(960, 590, "S-Prozess"),
+                if (showArrows) displayArrowLegend(1350, 670, "R-Prozess")
               ],
             )));
   }
@@ -128,5 +140,38 @@ class _GraphScreenState extends State<GraphScreen> {
         )
       ]),
     );
+  }
+
+  Widget toggleShowArrows() {
+    return Positioned(
+      top: 32,
+      left: 400,
+      child: Row(children: [
+        const Text(
+          "Zeige Prozessbereiche: ",
+          style: TextStyle(fontSize: 18),
+        ),
+        IconButton(
+          icon: showArrows
+              ? const Icon(Icons.check_box)
+              : const Icon(Icons.check_box_outline_blank),
+          onPressed: () {
+            setState(() {
+              showArrows = showArrows ? showArrows = false : showArrows = true;
+            });
+          },
+        )
+      ]),
+    );
+  }
+
+  Widget displayArrowLegend(double x, double y, String text) {
+    return Positioned(
+        left: x,
+        bottom: y,
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ));
   }
 }
