@@ -31,8 +31,7 @@ class _GraphScreenState extends State<GraphScreen> {
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
-    print(x);
-    print("y" + y.toString());
+
     return Scaffold(
         body: MouseRegion(
             onHover: _updateLocation,
