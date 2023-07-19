@@ -25,7 +25,7 @@ class _GraphScreenState extends State<GraphScreen> {
 
   double x = 0.0;
   double y = 0.0;
-  bool showArrows = true;
+  bool showArrows = false;
 
   @override
   Widget build(BuildContext context) {
