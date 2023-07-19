@@ -2,7 +2,7 @@
 I built this project for a physics presentation in high school to make explaining r- and s-processes much easier.
 
 ## How to use?
-The webapp is hosted at https://neuklidkarte.web.app/#/. To see the actual data please download the csv file "nuclid_data.csv" from above and simply upload it on the webapp.
+The webapp is hosted at https://neuklidkarte.web.app/#/.
 
 ## Quick demo
 ![Alt text](<voll mit pfeilen.png>)
