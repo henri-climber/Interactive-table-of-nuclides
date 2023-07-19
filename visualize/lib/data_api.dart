@@ -82,7 +82,7 @@ Future<List<AtomWidget>> importCSV() async {
         color: color,
       ));
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
   return elements;
