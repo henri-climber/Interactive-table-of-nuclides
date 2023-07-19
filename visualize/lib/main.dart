@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Neuklidkarte',
+      title: 'Table of nuclides',
       theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: black),
