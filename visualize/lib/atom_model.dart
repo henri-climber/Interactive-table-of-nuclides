@@ -1,35 +1,21 @@
 import 'package:flutter/material.dart';
 
-class AtomWidget extends StatelessWidget {
+class AtomWidget {
   final int protonCount;
   final int neutronCount;
   final String symbol;
   final dynamic decay;
-
   final Color color;
+  late double x;
+  late double y;
 
-  const AtomWidget(
-      {super.key,
-      required this.protonCount,
+  AtomWidget(
+      {required this.protonCount,
       required this.neutronCount,
       required this.symbol,
       required this.decay,
-      required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        left: 150 + neutronCount * 10,
-        bottom: 50 + protonCount * 10,
-        child: GestureDetector(
-          onTap: () {
-            print(symbol + protonCount.toString() + neutronCount.toString());
-          },
-          child: Container(
-            width: 10,
-            height: 10,
-            color: color,
-          ),
-        ));
+      required this.color}) {
+    x = 150 + neutronCount * 10;
+    y = 60 + protonCount * 10;
   }
 }
