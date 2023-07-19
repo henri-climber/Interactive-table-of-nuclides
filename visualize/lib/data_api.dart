@@ -1,10 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:periodic_table/periodic_table.dart';
 import 'package:visualize/atom_model.dart';
@@ -29,15 +24,12 @@ List<AtomWidget> getElements() {
 }
 
 Future<List<AtomWidget>> importCSV() async {
-  //Pick file
-  FilePickerResult? csvFile = await FilePicker.platform.pickFiles(
-      allowedExtensions: ['csv'], type: FileType.custom, allowMultiple: false);
+  final response = await html.HttpRequest.getString('assets/nuclid_data.csv');
 
-  //decode bytes back to utf8
-  final bytes =
-      utf8.decode(csvFile!.files[0].bytes as List<int>); //from the csv plugin
-  List<List<dynamic>> rowsAsListOfValues =
-      const CsvToListConverter(fieldDelimiter: ",", eol: "\n").convert(bytes);
+  List<List<dynamic>> rowsAsListOfValues = const CsvToListConverter(
+    fieldDelimiter: ",",
+    eol: "\n",
+  ).convert(response);
 
   List<AtomWidget> elements = <AtomWidget>[];
   rowsAsListOfValues.removeAt(0);
@@ -131,20 +123,5 @@ Future<List<AtomWidget>> importCSV() async {
       debugPrint(e.toString());
     }
   }
-  print(allDecays.toSet());
   return elements;
-}
-
-Future<Uint8List> getNeuklidData() async {
-  FirebaseStorage storage = FirebaseStorage.instance;
-  var ref = storage.ref().child("neuklid_data.csv");
-
-  String downloadUrl = await ref.getDownloadURL();
-
-  Uint8List? bytes = await ref.getData();
-  if (bytes != null) {
-    print(bytes.length);
-    return bytes;
-  }
-  return Uint8List(1);
 }

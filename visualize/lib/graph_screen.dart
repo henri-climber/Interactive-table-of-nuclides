@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:visualize/atom_model.dart';
 import 'package:visualize/data_api.dart';
 import 'package:visualize/graph_background.dart';
@@ -19,6 +18,7 @@ class _GraphScreenState extends State<GraphScreen> {
   double _sliderValue = 20;
   List<AtomWidget> atoms = [];
   List<AtomWidget> allAtoms = [];
+  final Future<List<AtomWidget>> _loadAtoms = importCSV();
 
   double x = 0.0;
   double y = 0.0;
@@ -32,29 +32,41 @@ class _GraphScreenState extends State<GraphScreen> {
     return Scaffold(
         body: MouseRegion(
             onHover: _updateLocation,
-            child: Stack(
-              children: [
-                const GraphBackgroundWidget(),
-                CustomPaint(
-                  painter: MyPainter(
-                    showArrows: showArrows,
-                    elements: atoms,
-                    maxNeutronCount: _sliderValue.toInt(),
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.fromLTRB(150, 0, 0, 50),
-                      child: Container()),
-                ),
-                customSlider(),
-                toggleShowArrows(),
-                loadElementsButton(),
-                showDetialsOfElement(),
-                if (showArrows) displayArrowLegend(230, 90, "Fusion bis Eisen"),
-                if (showArrows) displayArrowLegend(530, 390, "RP-Prozess"),
-                if (showArrows) displayArrowLegend(820, 690, "P-Prozess"),
-                if (showArrows) displayArrowLegend(960, 590, "S-Prozess"),
-                if (showArrows) displayArrowLegend(1350, 670, "R-Prozess")
-              ],
+            child: FutureBuilder(
+              future: _loadAtoms,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  allAtoms = snapshot.data as List<AtomWidget>;
+                  atoms = allAtoms;
+                  return Stack(
+                    children: [
+                      const GraphBackgroundWidget(),
+                      CustomPaint(
+                        painter: MyPainter(
+                          showArrows: showArrows,
+                          elements: atoms,
+                          maxNeutronCount: _sliderValue.toInt(),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(150, 0, 0, 50),
+                            child: Container()),
+                      ),
+                      customSlider(),
+                      toggleShowArrows(),
+                      showDetialsOfElement(),
+                      if (showArrows)
+                        displayArrowLegend(230, 90, "Fusion bis Eisen"),
+                      if (showArrows)
+                        displayArrowLegend(530, 390, "RP-Prozess"),
+                      if (showArrows) displayArrowLegend(820, 690, "P-Prozess"),
+                      if (showArrows) displayArrowLegend(960, 590, "S-Prozess"),
+                      if (showArrows) displayArrowLegend(1350, 670, "R-Prozess")
+                    ],
+                  );
+                }
+
+                return const GraphBackgroundWidget();
+              },
             )));
   }
 
